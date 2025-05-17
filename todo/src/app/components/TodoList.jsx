@@ -5,7 +5,7 @@ import { Plus, Search, Sun, Moon, Calendar, Clock, Edit2, Trash2, Check, X } fro
 export default function TodoList() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
-  const [editId, setEditId] = useState(null); // Changed from editIndex to editId
+  const [editIndex, setEditIndex] = useState(null);
   const [search, setSearch] = useState('');
   const [darkMode, setDarkMode] = useState(false);
   const [filter, setFilter] = useState('all');
@@ -37,15 +37,11 @@ export default function TodoList() {
 
   const addTodo = () => {
     if (!input.trim()) return;
-    if (editId !== null) {
-      // Update existing todo by finding it by id
-      const updated = todos.map(todo =>
-        todo.id === editId
-          ? { ...todo, text: input.trim(), priority, category }
-          : todo
-      );
+    if (editIndex !== null) {
+      const updated = [...todos];
+      updated[editIndex].text = input.trim();
       setTodos(updated);
-      setEditId(null);
+      setEditIndex(null);
     } else {
       const newTodo = {
         id: Date.now(),
@@ -75,13 +71,13 @@ export default function TodoList() {
   const editTodo = (id) => {
     const todo = todos.find(t => t.id === id);
     setInput(todo.text);
-    setEditId(id); // Changed from setEditIndex to setEditId
+    setEditIndex(id);
     setPriority(todo.priority || 'medium');
     setCategory(todo.category || 'personal');
   };
 
   const cancelEdit = () => {
-    setEditId(null); // Changed from setEditIndex to setEditId
+    setEditIndex(null);
     setInput('');
     setPriority('medium');
     setCategory('personal');
@@ -218,7 +214,7 @@ export default function TodoList() {
                       : 'bg-white border-gray-200 text-gray-800 placeholder-gray-500'
                   }`}
                 />
-                {editId !== null && ( // Changed from editIndex to editId
+                {editIndex !== null && (
                   <button
                     onClick={cancelEdit}
                     className="p-3 rounded-xl bg-gray-500/20 text-gray-400 hover:bg-gray-500/30 transition-all duration-200"
@@ -230,7 +226,7 @@ export default function TodoList() {
                   onClick={addTodo}
                   className="p-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-200 hover:scale-105"
                 >
-                  {editId !== null ? <Check className="w-5 h-5" /> : <Plus className="w-5 h-5" />} {/* Changed from editIndex to editId */}
+                  {editIndex !== null ? <Check className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
                 </button>
               </div>
 
@@ -417,6 +413,9 @@ export default function TodoList() {
             )}
           </div>
         </div>
+
+       
+       
       </div>
     </div>
   );
