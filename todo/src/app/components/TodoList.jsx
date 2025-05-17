@@ -128,7 +128,7 @@ export default function TodoList() {
           <h1 className={`text-5xl font-bold mb-4 ${
             darkMode ? 'text-white' : 'text-gray-800'
           }`}>
-            ✨ Todo Mastery
+             Todo Mastery
           </h1>
           <p className={`text-lg ${
             darkMode ? 'text-gray-300' : 'text-gray-600'
